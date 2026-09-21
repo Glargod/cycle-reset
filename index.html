@@ -6,8 +6,402 @@
   <meta name="theme-color" content="#0a0e14" />
   <meta name="description" content="Cycle Reset — personal countdowns for Grok weekly usage, sleep, and any repeating cycle." />
   <title>Cycle Reset</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='28' fill='%230a0e14' stroke='%23e8b86d' stroke-width='4'/><path d='M32 10 A22 22 0 0 1 54 32' fill='none' stroke='%2378c4a4' stroke-width='5' stroke-linecap='round'/></svg>" />
+  <style>
+    :root {
+      --bg: #0a0e14;
+      --bg2: #121821;
+      --bg3: #1a2330;
+      --line: #2a3648;
+      --text: #e8eef6;
+      --muted: #8b9bb0;
+      --gold: #e8b86d;
+      --mint: #78c4a4;
+      --coral: #e07a6a;
+      --sky: #6ea8d8;
+      --violet: #9b8ad4;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    body { min-height: 100dvh; }
+    a { color: var(--mint); }
+    header.top { padding: 1.1rem 1.2rem 0.4rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .brand { display: flex; gap: .75rem; align-items: center; }
+    .mark { width: 42px; height: 42px; border-radius: 50%; background: conic-gradient(from 210deg, var(--mint), var(--gold), var(--coral), var(--mint)); display: grid; place-items: center; flex-shrink: 0; }
+    .mark span { width: 30px; height: 30px; border-radius: 50%; background: var(--bg); display: grid; place-items: center; font-size: 16px; }
+    .brand h1 { margin: 0; font-size: 1.15rem; letter-spacing: .04em; }
+    .brand p { margin: .15rem 0 0; color: var(--muted); font-size: .82rem; }
+    .clock { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; font-size: .82rem; }
+    .clock b { display: block; color: var(--text); font-size: .95rem; font-weight: 600; }
+    main { max-width: 920px; margin: 0 auto; padding: 0 1rem 4rem; }
+    .hero { margin: 1rem 0 1.4rem; padding: 1.2rem; background: radial-gradient(120% 80% at 50% 0%, #1c2838 0%, var(--bg2) 60%); border: 1px solid var(--line); border-radius: 18px; }
+    .hero-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+    .hero-top h2 { margin: 0; font-size: 1rem; font-weight: 600; color: var(--gold); }
+    .hero-top .tag { color: var(--muted); font-size: .8rem; }
+    .ring-wrap { display: grid; place-items: center; padding: .6rem 0 1rem; }
+    .ring { position: relative; width: min(260px, 72vw); height: min(260px, 72vw); }
+    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring .track { fill: none; stroke: #243040; stroke-width: 10; }
+    .ring .prog { fill: none; stroke: var(--mint); stroke-width: 10; stroke-linecap: round; transition: stroke-dashoffset .4s ease; }
+    .ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 1.4rem; }
+    .ring-center .label { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .12em; }
+    .ring-center .cd { font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: .02em; margin: .25rem 0; }
+    .ring-center .when { color: var(--muted); font-size: .82rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+    button, .btn { appearance: none; border: 1px solid var(--line); background: var(--bg3); color: var(--text); border-radius: 10px; padding: .55rem .85rem; font-size: .88rem; cursor: pointer; }
+    button.primary { background: var(--mint); color: #082018; border-color: transparent; font-weight: 650; }
+    button.ghost { background: transparent; }
+    button.warn { background: #3a2220; border-color: #5a3430; color: #f0c4bc; }
+    button:hover { filter: brightness(1.08); }
+    button:disabled { opacity: .45; cursor: default; }
+    .grid { display: grid; gap: .85rem; }
+    @media (min-width: 720px) { .grid.two { grid-template-columns: 1fr 1fr; } }
+    .card { background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 1rem; }
+    .card h3 { margin: 0 0 .7rem; font-size: .95rem; }
+    .cycle { display: grid; grid-template-columns: auto 1fr auto; gap: .75rem; align-items: center; padding: .75rem; border: 1px solid var(--line); border-radius: 12px; background: #0e141c; margin-bottom: .55rem; }
+    .cycle.active { outline: 1px solid color-mix(in srgb, var(--accent, var(--mint)) 50%, transparent); }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--accent, var(--mint)); }
+    .cycle .name { font-weight: 600; }
+    .cycle .meta { color: var(--muted); font-size: .78rem; margin-top: .15rem; }
+    .cycle .left { text-align: right; font-variant-numeric: tabular-nums; font-weight: 650; }
+    .cycle .left small { display: block; color: var(--muted); font-weight: 500; }
+    .bar { height: 4px; background: #243040; border-radius: 99px; margin-top: .45rem; overflow: hidden; }
+    .bar > i { display: block; height: 100%; width: 0; background: var(--accent, var(--mint)); }
+    form.edit { display: grid; gap: .55rem; }
+    label { display: grid; gap: .25rem; font-size: .78rem; color: var(--muted); }
+    input, select, textarea { background: #0e141c; border: 1px solid var(--line); color: var(--text); border-radius: 8px; padding: .5rem .6rem; font-size: .92rem; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+    @media (max-width: 520px) { .row { grid-template-columns: 1fr; } }
+    ul.hist { list-style: none; margin: 0; padding: 0; }
+    ul.hist li { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--line); font-size: .86rem; }
+    ul.hist time { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .faq details { border-top: 1px solid var(--line); padding: .7rem 0; }
+    .faq summary { cursor: pointer; font-weight: 600; }
+    .faq p { color: var(--muted); font-size: .9rem; line-height: 1.45; }
+    footer { color: var(--muted); font-size: .78rem; text-align: center; padding: 2rem 1rem; }
+    .toast { position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%); background: #1e2a20; color: var(--mint); border: 1px solid #355044; padding: .55rem .9rem; border-radius: 999px; font-size: .85rem; display: none; z-index: 20; }
+    .empty { color: var(--muted); font-size: .88rem; }
+  </style>
 </head>
 <body>
-<p>placeholder</p>
+  <header class="top">
+    <div class="brand">
+      <div class="mark"><span>↻</span></div>
+      <div>
+        <h1>Cycle Reset</h1>
+        <p>Countdowns for usage weeks, sleep, and anything that loops</p>
+      </div>
+    </div>
+    <div class="clock">
+      <b id="nowLocal">—</b>
+      <span id="nowTz">—</span>
+    </div>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="hero-top">
+        <h2 id="focusName">No cycle yet</h2>
+        <span class="tag" id="focusMeta">Add one below</span>
+      </div>
+      <div class="ring-wrap">
+        <div class="ring">
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle class="track" cx="60" cy="60" r="52"></circle>
+            <circle class="prog" id="ringProg" cx="60" cy="60" r="52"></circle>
+          </svg>
+          <div class="ring-center">
+            <div class="label" id="ringLabel">until reset</div>
+            <div class="cd" id="ringCd">—</div>
+            <div class="when" id="ringWhen"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="primary" id="btnResetNow" type="button">Mark reset now</button>
+        <button id="btnNotify" type="button">Remind me</button>
+        <button class="ghost" id="btnFocusNext" type="button">Next cycle →</button>
+      </div>
+    </section>
+    <section class="grid two">
+      <div class="card">
+        <h3>Your cycles</h3>
+        <div id="cycleList"></div>
+        <p class="empty" id="cycleEmpty">Nothing tracked yet. Seed a SuperGrok week or add your own.</p>
+      </div>
+      <div class="card">
+        <h3 id="formTitle">Add a cycle</h3>
+        <form class="edit" id="form">
+          <input type="hidden" id="editId" />
+          <label>Name <input id="fName" required maxlength="60" placeholder="SuperGrok weekly" /></label>
+          <div class="row">
+            <label>Period
+              <select id="fEvery">
+                <option value="7d">Every 7 days</option>
+                <option value="1d">Every day</option>
+                <option value="14d">Every 14 days</option>
+                <option value="30d">Every 30 days</option>
+                <option value="custom">Custom hours</option>
+              </select>
+            </label>
+            <label>Custom hours <input id="fHours" type="number" min="0.5" max="8760" step="0.5" placeholder="168" /></label>
+          </div>
+          <label>Next reset (your local time) <input id="fNext" type="datetime-local" required /></label>
+          <div class="row">
+            <label>Color
+              <select id="fColor">
+                <option value="#78c4a4">Mint</option>
+                <option value="#e8b86d">Gold</option>
+                <option value="#6ea8d8">Sky</option>
+                <option value="#9b8ad4">Violet</option>
+                <option value="#e07a6a">Coral</option>
+              </select>
+            </label>
+            <label>Kind
+              <select id="fKind">
+                <option value="usage">Usage / quota</option>
+                <option value="sleep">Sleep</option>
+                <option value="habit">Habit / chore</option>
+                <option value="other">Other</option>
+              </select>
+            </label>
+          </div>
+          <label>Note <input id="fNote" maxlength="160" placeholder="Copy the stamp from Settings → Usage" /></label>
+          <div class="hero-actions" style="justify-content:flex-start">
+            <button class="primary" type="submit">Save cycle</button>
+            <button class="ghost" type="button" id="btnCancelEdit">Cancel</button>
+            <button class="warn" type="button" id="btnDelete" hidden>Delete</button>
+          </div>
+        </form>
+        <div class="hero-actions" style="justify-content:flex-start;margin-top:.75rem">
+          <button type="button" id="btnSeedGrok">Seed SuperGrok week</button>
+          <button type="button" id="btnSeedSleep">Seed sleep cycle</button>
+        </div>
+      </div>
+    </section>
+    <section class="card" style="margin-top:1rem">
+      <h3>Reset log</h3>
+      <ul class="hist" id="hist"></ul>
+      <p class="empty" id="histEmpty">Marked resets land here. Stays on this device only.</p>
+    </section>
+    <section class="card faq" style="margin-top:1rem">
+      <h3>How this works</h3>
+      <details open>
+        <summary>Grok / SuperGrok weekly pool</summary>
+        <p>Paid SuperGrok plans share one weekly usage pool across Chat, Imagine, Voice, and Build. The exact reset stamp is on <b>Settings → Usage</b> for your account — it is not the same for everyone, and it is not midnight UTC for every account.</p>
+        <p>This page does not read xAI. Paste the next reset from Usage, then the ring and reminders run locally.</p>
+      </details>
+      <details>
+        <summary>Provider-wide make-good resets</summary>
+        <p>xAI sometimes clears used percentage for everyone (model launches, quality fixes). Those events do not always move your printed weekly stamp. If you get an extra reset, tap <b>Mark reset now</b> and set the next stamp again if Usage changed.</p>
+        <p>Recent public ones (community-tracked, not official): 26 Aug 2026 (Bot access + weekly reset), 1 Sep 2026, 5 Sep 2026.</p>
+      </details>
+      <details>
+        <summary>Sleep cycle seed</summary>
+        <p>A 90-minute sleep cycle is a planning aid, not a medical device. The seed assumes ~5 cycles (~7.5 h) from a bedtime you pick. Edit freely.</p>
+      </details>
+      <details>
+        <summary>Privacy</summary>
+        <p>Everything lives in <code>localStorage</code> on this browser. No account, no server. Export/import if you want a backup.</p>
+        <div class="hero-actions" style="justify-content:flex-start;margin-top:.4rem">
+          <button type="button" id="btnExport">Export JSON</button>
+          <button type="button" id="btnImport">Import JSON</button>
+          <input id="importFile" type="file" accept="application/json" hidden />
+        </div>
+      </details>
+    </section>
+  </main>
+  <footer>Cycle Reset · local-first · <a href="https://github.com/Glargod/cycle-reset">source</a></footer>
+  <div class="toast" id="toast"></div>
+  <script>
+    const C = 2 * Math.PI * 52;
+    const KEY = "cycle-reset-v1";
+    const $ = (id) => document.getElementById(id);
+    const state = load() || { cycles: [], hist: [], focusId: null, notify: false };
+    function load() { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } }
+    function save() { localStorage.setItem(KEY, JSON.stringify(state)); }
+    function toast(msg) {
+      const t = $("toast"); t.textContent = msg; t.style.display = "block";
+      clearTimeout(toast._t); toast._t = setTimeout(() => t.style.display = "none", 2200);
+    }
+    function uid() { return Math.random().toString(36).slice(2, 10); }
+    function periodMs(c) {
+      if (c.every === "custom") return Math.max(0.5, Number(c.hours) || 168) * 3600000;
+      const n = parseInt(c.every, 10);
+      return n * (c.every.endsWith("d") ? 86400000 : 3600000);
+    }
+    function nextAfter(c, from = Date.now()) {
+      let t = c.next; const step = periodMs(c);
+      if (t > from) return t;
+      return t + (Math.floor((from - t) / step) + 1) * step;
+    }
+    function fmtDur(ms) {
+      if (ms <= 0) return "now";
+      const s = Math.floor(ms / 1000);
+      const d = Math.floor(s / 86400);
+      const h = Math.floor((s % 86400) / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      if (d > 0) return d + "d " + String(h).padStart(2,"0") + "h " + String(m).padStart(2,"0") + "m";
+      if (h > 0) return h + "h " + String(m).padStart(2,"0") + "m " + String(sec).padStart(2,"0") + "s";
+      return m + "m " + String(sec).padStart(2,"0") + "s";
+    }
+    function fmtWhen(ts) {
+      return new Date(ts).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+    }
+    function toLocalInput(ts) {
+      const d = new Date(ts); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+      return d.toISOString().slice(0, 16);
+    }
+    function focusCycle() {
+      if (!state.cycles.length) return null;
+      let c = state.cycles.find(x => x.id === state.focusId);
+      if (!c) { c = [...state.cycles].sort((a,b) => nextAfter(a) - nextAfter(b))[0]; state.focusId = c.id; }
+      return c;
+    }
+    function renderClock() {
+      const now = new Date();
+      $("nowLocal").textContent = now.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      $("nowTz").textContent = tz + " · " + now.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    }
+    function renderHero() {
+      const c = focusCycle(); const ring = $("ringProg"); ring.style.strokeDasharray = String(C);
+      if (!c) {
+        $("focusName").textContent = "No cycle yet"; $("focusMeta").textContent = "Add one below";
+        $("ringCd").textContent = "—"; $("ringWhen").textContent = ""; ring.style.strokeDashoffset = String(C);
+        $("btnResetNow").disabled = true; return;
+      }
+      $("btnResetNow").disabled = false;
+      const now = Date.now(); const nxt = nextAfter(c, now); const span = periodMs(c);
+      const remain = Math.max(0, nxt - now); const used = Math.min(1, Math.max(0, 1 - remain / span));
+      $("focusName").textContent = c.name;
+      $("focusMeta").textContent = (c.kind || "cycle") + (c.note ? " · " + c.note : "");
+      $("ringCd").textContent = fmtDur(remain);
+      $("ringWhen").textContent = "resets " + fmtWhen(nxt);
+      $("ringLabel").textContent = remain === 0 ? "reset window" : "until reset";
+      ring.style.stroke = c.color || "#78c4a4";
+      ring.style.strokeDashoffset = String(C * (1 - used));
+    }
+    function escapeHtml(s) {
+      return String(s || "").replace(/[&<>"']/g, m => ({ "&":"&","<":"<",">":">","\"":""","'":"&#39;" }[m]));
+    }
+    function labelPeriod(c) {
+      if (c.every === "custom") return (c.hours || "?") + "h";
+      return c.every.replace("d", " days").replace("1 days", "day");
+    }
+    function renderList() {
+      const box = $("cycleList"); box.innerHTML = "";
+      $("cycleEmpty").style.display = state.cycles.length ? "none" : "block";
+      const now = Date.now();
+      [...state.cycles].sort((a,b) => nextAfter(a, now) - nextAfter(b, now)).forEach(c => {
+        const nxt = nextAfter(c, now); const span = periodMs(c);
+        const remain = Math.max(0, nxt - now); const used = Math.min(1, Math.max(0, 1 - remain / span));
+        const el = document.createElement("div");
+        el.className = "cycle" + (c.id === state.focusId ? " active" : "");
+        el.style.setProperty("--accent", c.color || "#78c4a4");
+        el.innerHTML = '<div class="dot"></div><div><div class="name">'+escapeHtml(c.name)+'</div><div class="meta">'+escapeHtml(c.kind||'')+' · every '+labelPeriod(c)+'</div><div class="bar"><i style="width:'+(used*100).toFixed(1)+'%"></i></div></div><div class="left">'+fmtDur(remain)+'<small>'+fmtWhen(nxt)+'</small></div>';
+        el.addEventListener("click", () => { state.focusId = c.id; save(); fillForm(c); render(); });
+        box.appendChild(el);
+      });
+    }
+    function renderHist() {
+      const ul = $("hist"); ul.innerHTML = "";
+      $("histEmpty").style.display = state.hist.length ? "none" : "block";
+      state.hist.slice(0, 40).forEach(h => {
+        const li = document.createElement("li");
+        li.innerHTML = '<span>'+escapeHtml(h.name)+'</span><time>'+fmtWhen(h.at)+'</time>';
+        ul.appendChild(li);
+      });
+    }
+    function render() { renderClock(); renderHero(); renderList(); renderHist(); }
+    function fillForm(c) {
+      $("formTitle").textContent = c ? "Edit cycle" : "Add a cycle";
+      $("editId").value = c ? c.id : "";
+      $("fName").value = c ? c.name : "";
+      $("fEvery").value = c ? c.every : "7d";
+      $("fHours").value = c && c.hours ? c.hours : "";
+      $("fNext").value = c ? toLocalInput(c.next) : toLocalInput(Date.now() + 7*86400000);
+      $("fColor").value = c && c.color ? c.color : "#78c4a4";
+      $("fKind").value = c ? c.kind : "usage";
+      $("fNote").value = c && c.note ? c.note : "";
+      $("btnDelete").hidden = !c;
+    }
+    $("form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const next = new Date($("fNext").value).getTime();
+      if (!Number.isFinite(next)) return toast("Need a valid next reset");
+      const rec = { id: $("editId").value || uid(), name: $("fName").value.trim(), every: $("fEvery").value, hours: Number($("fHours").value) || 168, next, color: $("fColor").value, kind: $("fKind").value, note: $("fNote").value.trim() };
+      const i = state.cycles.findIndex(x => x.id === rec.id);
+      if (i >= 0) state.cycles[i] = rec; else state.cycles.push(rec);
+      state.focusId = rec.id; save(); fillForm(rec); render(); toast("Saved");
+    });
+    $("btnCancelEdit").addEventListener("click", () => fillForm(null));
+    $("btnDelete").addEventListener("click", () => {
+      const id = $("editId").value;
+      state.cycles = state.cycles.filter(c => c.id !== id);
+      if (state.focusId === id) state.focusId = null;
+      save(); fillForm(null); render(); toast("Deleted");
+    });
+    $("btnResetNow").addEventListener("click", () => {
+      const c = focusCycle(); if (!c) return;
+      const now = Date.now();
+      state.hist.unshift({ name: c.name, at: now, id: c.id });
+      c.next = now + periodMs(c); save(); fillForm(c); render();
+      toast("Reset marked · next " + fmtWhen(c.next));
+    });
+    $("btnFocusNext").addEventListener("click", () => {
+      if (!state.cycles.length) return;
+      const now = Date.now();
+      const ordered = [...state.cycles].sort((a,b) => nextAfter(a, now) - nextAfter(b, now));
+      const i = ordered.findIndex(c => c.id === state.focusId);
+      state.focusId = ordered[(i + 1) % ordered.length].id; save(); fillForm(focusCycle()); render();
+    });
+    $("btnSeedGrok").addEventListener("click", () => {
+      const rec = { id: uid(), name: "SuperGrok weekly", every: "7d", hours: 168, next: Date.now() + 7*86400000, color: "#e8b86d", kind: "usage", note: "Replace next reset with Settings → Usage" };
+      state.cycles.push(rec); state.focusId = rec.id; save(); fillForm(rec); render(); toast("Seeded — set the real stamp from Usage");
+    });
+    $("btnSeedSleep").addEventListener("click", () => {
+      const bedtime = Date.now() + 30*60000;
+      const rec = { id: uid(), name: "Sleep · 5 × 90 min", every: "custom", hours: 7.5, next: bedtime + 7.5*3600000, color: "#9b8ad4", kind: "sleep", note: "Wake target after ~5 cycles" };
+      state.cycles.push(rec); state.focusId = rec.id; save(); fillForm(rec); render(); toast("Sleep seed added — edit bedtime via next reset");
+    });
+    $("btnNotify").addEventListener("click", async () => {
+      if (!("Notification" in window)) return toast("Notifications not available");
+      const perm = await Notification.requestPermission();
+      state.notify = perm === "granted"; save();
+      toast(state.notify ? "Reminders on for this browser" : "Permission denied");
+    });
+    $("btnExport").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "cycle-reset-backup.json"; a.click();
+    });
+    $("btnImport").addEventListener("click", () => $("importFile").click());
+    $("importFile").addEventListener("change", async (e) => {
+      const f = e.target.files[0]; if (!f) return;
+      try {
+        const data = JSON.parse(await f.text());
+        if (!data || !Array.isArray(data.cycles)) throw new Error("bad file");
+        state.cycles = data.cycles; state.hist = Array.isArray(data.hist) ? data.hist : [];
+        state.focusId = data.focusId || (state.cycles[0] && state.cycles[0].id);
+        save(); fillForm(focusCycle()); render(); toast("Imported");
+      } catch { toast("Could not import that file"); }
+    });
+    let lastPing = {};
+    function tick() {
+      renderClock(); renderHero();
+      const now = Date.now();
+      if (state.notify && Notification.permission === "granted") {
+        state.cycles.forEach(c => {
+          const nxt = nextAfter(c, now);
+          if (nxt - now < 1000 && nxt - now >= 0 && lastPing[c.id] !== nxt) {
+            lastPing[c.id] = nxt;
+            try { new Notification("Cycle reset: " + c.name, { body: "Marked window is now." }); } catch {}
+          }
+        });
+      }
+    }
+    fillForm(focusCycle()); render();
+    setInterval(() => { tick(); renderList(); }, 1000);
+  </script>
 </body>
 </html>
