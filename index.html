@@ -6,27 +6,27 @@
   <title>The Reset Cycle</title>
   <style>
     :root {
-      --bg: #0f1110;
-      --paper: #161a18;
-      --ink: #e8e0d2;
-      --dim: #9a917f;
-      --line: #2c322e;
-      --hard: #c44b2b;
-      --strong: #c4a35a;
-      --good: #6f8f6a;
-      --weak: #7a8aa3;
-      --grey: #b7b1a3;
+      --bg: #f6f1e8;
+      --paper: #fffdf8;
+      --ink: #2a241c;
+      --dim: #6b6256;
+      --line: #ddd3c3;
+      --hard: #a33b24;
+      --strong: #8a6a2e;
+      --good: #4d6b48;
+      --weak: #4d5d73;
+      --grey: #6f6a60;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
-      font-family: Georgia, "Iowan Old Style", serif;
-      line-height: 1.55;
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      line-height: 1.62;
       font-size: 18px;
     }
-    .wrap { max-width: 860px; margin: 0 auto; padding: 42px 22px 90px; }
+    .wrap { max-width: 880px; margin: 0 auto; padding: 48px 24px 96px; }
     .kicker {
       font-family: "Avenir Next", "Segoe UI", sans-serif;
       letter-spacing: .18em;
@@ -34,17 +34,18 @@
       font-size: 11px;
       color: var(--strong);
     }
-    h1 { font-size: 40px; line-height: 1.05; margin: 10px 0 8px; font-weight: 600; }
-    .lede { color: var(--dim); font-style: italic; font-size: 19px; margin-bottom: 28px; }
-    h2 { font-size: 22px; margin: 36px 0 10px; }
+    h1 { font-size: 40px; line-height: 1.08; margin: 12px 0 10px; font-weight: 650; }
+    .lede { color: var(--dim); font-style: italic; font-size: 20px; margin: 0 0 28px; }
+    h2 { font-size: 26px; margin: 40px 0 12px; }
+    h3 { font-size: 19px; margin: 26px 0 8px; }
     p { margin: 0 0 14px; }
     .proverb {
-      border: 1px solid var(--line);
-      padding: 20px 22px;
-      margin: 10px 0 26px;
       background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 22px 24px;
+      margin: 8px 0 28px;
     }
-    .proverb b { display: block; font-size: 20px; margin: 0 0 6px; }
+    .proverb b { display: block; font-size: 21px; margin: 0 0 7px; }
     .proverb b.hard { color: var(--hard); }
     .proverb b.strong { color: var(--strong); }
     .proverb b.good { color: var(--good); }
@@ -52,20 +53,20 @@
     .wheel {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 16px 0 24px;
+      gap: 12px;
+      margin: 16px 0 26px;
     }
     .phase {
       background: var(--paper);
       border: 1px solid var(--line);
-      padding: 14px 15px;
+      padding: 16px 17px;
     }
     .phase .n {
       font-family: "Avenir Next", "Segoe UI", sans-serif;
       font-size: 11px;
       letter-spacing: .14em;
       text-transform: uppercase;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .p1 .n { color: var(--good); }
     .p2 .n { color: var(--weak); }
@@ -76,25 +77,34 @@
       font-size: 13px;
       letter-spacing: .04em;
       color: var(--strong);
+      margin-bottom: 4px;
     }
-    .spec { color: #8fb08a; }
-    .tl { border-left: 2px solid var(--line); margin: 18px 0 8px; padding-left: 18px; }
-    .item { margin: 0 0 18px; }
-    table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0 20px; }
-    th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 9px 6px; vertical-align: top; }
+    .spec { color: var(--good); }
+    .tl { border-left: 2px solid var(--line); margin: 18px 0 10px; padding-left: 20px; }
+    .item { margin: 0 0 22px; }
+    table { width: 100%; border-collapse: collapse; font-size: 15.5px; margin: 10px 0 22px; background: var(--paper); }
+    th, td { border-bottom: 1px solid var(--line); text-align: left; padding: 10px 8px; vertical-align: top; }
     th { color: var(--dim); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
-    .note {
+    .note, .card {
+      background: var(--paper);
       border: 1px solid var(--line);
-      padding: 14px 16px;
-      color: var(--dim);
-      font-size: 16px;
-      margin: 18px 0;
+      padding: 16px 18px;
+      margin: 16px 0;
     }
-    footer { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 14px; color: var(--dim); font-size: 14px; }
-    @media (max-width: 640px) { .wheel { grid-template-columns: 1fr; } h1 { font-size: 32px; } }
+    footer {
+      margin-top: 48px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--dim);
+      font-size: 14px;
+    }
+    @media (max-width: 680px) {
+      .wheel { grid-template-columns: 1fr; }
+      h1 { font-size: 32px; }
+    }
     @media print {
-      body { background: white; color: #111; }
-      .proverb, .phase, .note { background: #f6f3ec; }
+      body { background: white; }
+      .wrap { padding: 16px 0; }
     }
   </style>
 </head>
@@ -111,76 +121,93 @@
       <b class="weak">Weak people create hard times.</b>
     </div>
 
-    <p>“People,” not a sex. The old word was <em>men</em> because that is how the language used to say the human stock of a society — the symbiotic field of males and females, households, crafts, armies, and memory. When that field holds, surplus appears. When it softens, the surplus eats the field that made it.</p>
+    <p>“People,” not a sex. The old word was <em>men</em> because that is how English once named the human stock of a society — males and females together, the households, crafts, armies, churches, and memory that either hold or fail as one field. Jesus as “son of men” is the same usage: a human among humans. When that field holds, surplus appears. When it softens, the surplus eats the field that made it.</p>
 
-    <h2>The four-phase wheel</h2>
+    <h2>The proverb is a machine</h2>
+    <p>It is not a law of physics. It is a recurring human pattern. Necessity selects for competence, cohesion, and the willingness to carry weight. Competence produces order. Order produces surplus. Surplus, if it lasts long enough without a rival pressure, produces spectators. Spectators inherit the harvest and forget the weather that grew it. Then the weather returns.</p>
+    <p>Rome is the large Western proof-of-concept. A hard republic breeds expansion. Expansion breeds the good peace. The good peace breeds luxury, hired armies, elite civil war, and hollow offices. Hollow offices meet plague, tax collapse, and migration they can no longer metabolize. The West falls. The East lasts longer. The proverb describes a tendency, not a death sentence for every branch of a civilization.</p>
+    <p>Two clocks run at once. The short clock is generational, about 80–100 years: Silent, Boom, X, Millennial, Z. The long clock is structural, about 200–300 years. When a fourth phase on the short clock lands on a late phase of the long clock, the grey interval gets louder. Technology then changes the tempo. A combustion engine can stall for a century. Phones and model-systems can rewrite attention in a decade. The wheel does not vanish. It spins faster through the same four rooms.</p>
+
+    <h2>The four rooms</h2>
     <div class="wheel">
       <div class="phase p1">
         <div class="n">Phase I · High</div>
-        <p>Hard times have already selected for competence. New rules are believed because they work. Children grow up inside order. This is the harvest of the last crisis.</p>
+        <p>Hard times have already selected. New rules are believed because they work. Children grow up inside order. This is the harvest of the last crisis, not the cause of the next one.</p>
       </div>
       <div class="phase p2">
         <div class="n">Phase II · Softening</div>
-        <p>Good times lengthen. Luxury, complexity, and moral theater replace necessity. Institutions keep their costumes and lose their spine. The field grows weak without yet knowing it is weak.</p>
+        <p>Good times lengthen. Luxury, complexity, and moral theater replace necessity. Institutions keep their costumes and lose their spine. The field grows weak without yet admitting it is weak.</p>
       </div>
       <div class="phase p3">
         <div class="n">Phase III · Hard times</div>
-        <p>The bill arrives. Polarization, elite surplus, debt, broken trust, and a story that no longer explains the street. Weakness is no longer a mood. It is a condition.</p>
+        <p>The bill arrives. Polarization, elite surplus, debt, broken trust, and a public story that no longer explains the street. Weakness is no longer a mood. It is a condition.</p>
       </div>
       <div class="phase p4">
         <div class="n">Phase IV · Grey / reset</div>
-        <p>The old order has lost authority. The new one is not born. This is the dangerous hinge: collapse, rewrite, or honest reconstruction. Sometimes the hinge includes an edit of the past itself.</p>
+        <p>The old order has lost authority. The new one is unborn. This is the hinge: collapse, rewrite, or honest reconstruction. Sometimes the hinge includes an edit of the past itself.</p>
       </div>
     </div>
 
-    <p>Two clocks run at once. The short clock is generational, about 80–100 years: Silent, Boom, X, Millennial, Z. The long clock is structural, about 200–300 years. When a fourth phase on the short clock lands on a late phase of the long clock, the grey interval gets louder. Technology then speeds the psyche. A combustion engine can stall for a century. A communications stack can rewrite attention in a decade. The wheel does not disappear. It spins faster.</p>
+    <h3>Phase I — hard times have already made strong people</h3>
+    <p>A High feels permanent to the people born inside it. That is the illusion. The competence is borrowed from the dead. Roads, courts, currencies, and habits of truth-telling still work because the last emergency punished anyone who treated them as optional. Children copy the working forms. For a while, the copy is enough.</p>
+
+    <h3>Phase II — good times create weak people</h3>
+    <p>Weak here does not mean kind. It means untested, over-credentialed, and increasingly unable to distinguish performance from capacity. Elite overproduction begins: too many people trained for scarce prestige seats. Shared narrative thins. Luxury becomes the measure of virtue. The society can still build astonishing things. It is already losing the ability to maintain the boring things that keep astonishing things from becoming ruins.</p>
+
+    <h3>Phase III — weak people create hard times</h3>
+    <p>The crack can look technical: a financial crisis, a war, a plague, a legitimacy collapse. Underneath, the same pattern is running. Institutions cannot metabolize conflict. Debt hides decline until it cannot. Every faction treats the other as the only problem. The public square fills with explanation and empties of repair.</p>
+
+    <h3>Phase IV — the grey line</h3>
+    <p>This is the room we have been circling. The old story is exhausted. The new story is not yet binding. Maximum uncertainty. Historically this is where catalytic events force a settlement: a new consensus, a new constitution of everyday life, or a successor myth printed over the last one. A reconstruction produces Phase I. A rewrite can also produce Phase I — for a different people, with a cleaner file.</p>
 
     <h2>Why a “factless” reset still sits on the wheel</h2>
-    <p>A normal crisis leaves ruins and arguments. A working reset leaves a successor story that looks obvious. If the Americas / nineteenth-century cleaning happened, the official file would be thin on purpose. That is the only respectable reason to keep a fact-poor hypothesis on this map: a successful Phase IV does not file a confession. Thinness is compatible with an edit. Thinness is not the edit’s proof. The wheel still needs both sentences.</p>
+    <p>A normal crisis leaves ruins and arguments. A working reset leaves a successor story that looks obvious. If an Americas / nineteenth-century cleaning happened, the official file would be thin on purpose. That is the only respectable reason to keep a fact-poor hypothesis on this map: a successful Phase IV does not file a confession.</p>
+    <p>Thinness is compatible with an edit. Thinness is not the edit’s proof. If “no remaining proof” is allowed to count as proof, the hypothesis cannot lose. Every gap becomes evidence and every surviving ledger becomes part of the cover. The wheel still needs both sentences. Compatibility is not demonstration. Demonstration would require positive remains that the successor story cannot metabolize: dirt, bone, independent archives, construction sequences, genetic continuity, living memory that was not supposed to survive.</p>
 
     <div class="note">Constrained events stay on the spine. The speculative reset is injected only at the hinges — the places where a cycle does not merely turn, but tries to make the last turn unrememberable.</div>
 
     <h2>The cycle in time</h2>
     <div class="tl">
       <div class="item">
-        <div class="when">Deep hinge · speculative</div>
-        <p>A prior world in the Americas is broken or overwritten as the continents are repeopled in the successor story. If this was a reset, it was Phase IV in its pure form: not only hard times, but a new Genesis printed over the last one.</p>
+        <div class="when spec">Deep hinge · speculative</div>
+        <p>A prior world in the Americas is broken or overwritten as the continents are later peopled in the successor story. If this was a reset, it was Phase IV in its pure form: not only hard times, but a new Genesis printed over the last one. People and places become unseeable. The next High inherits an empty map and calls the emptiness origin.</p>
       </div>
       <div class="item">
         <div class="when">Rome · constrained example of the full proverb</div>
-        <p>Hard republic → strong expansion → good imperial peace → softening, luxury, elite war, hollow institutions → hard times and a Western fall. The East lasted longer. The proverb is a pattern, not a death sentence for every branch.</p>
+        <p>Hard republic, strong expansion, good imperial peace, then softening: luxury, professional armies, elite war, hollow offices. Hard times follow, and the Western order reconfigures. Writers inside the decline already named luxury and lost discipline as causes. Modern scholarship adds money, plague, climate, and overextension. The proverb survives as the human layer of a multi-cause fall.</p>
       </div>
       <div class="item">
         <div class="when">1492–1700s · constrained hard times, speculative mop-up</div>
-        <p>Contact is already a reset-class shock: bodies, towns, languages, and maps collapse. The speculative layer says the shock was also used to seal a new peopling story. Either way, this is hard times creating a new order on someone else’s grave.</p>
+        <p>Contact is already a reset-class shock. Disease outruns armies. Towns empty. Languages go silent. Maps are redrawn by people who then describe the remnant as late, primitive, or absent. The speculative layer says the shock was also used to seal a new peopling story. Either way, this is hard times creating a new order on someone else’s grave.</p>
       </div>
       <div class="item">
         <div class="when spec">c. 1810–1893 · long-cycle Phase IV + short-cycle Phase IV</div>
-        <p>This is the injected hinge. Constrained facts: industrial leap, civil war, national myth-making, Mound Builder rewrite, asylums, orphan relocation, raised streets, world’s fairs. Speculative intensification: the same decades complete an edit — old grades buried, old fabric rebranded, dissent medicalized, a successor chronology locked. On the dual-clock reading, the nineteenth century is third/late on the long wave colliding with fourth on the short wave. That is why it feels like an ending and a beginning at once.</p>
+        <p>This is the injected hinge. Constrained facts: industrial leap, civil war, national myth-making, the Mound Builder rewrite, the asylum boom, orphan relocation, raised streets, world’s fairs. Speculative intensification: the same decades complete an edit — old grades buried, old fabric rebranded, dissent medicalized, a successor chronology locked. On the dual-clock reading, the nineteenth century is late on the long wave colliding with fourth on the short wave. That is why it feels like an ending and a beginning at once.</p>
+        <p>The Mound Builder episode is the constrained proof that the century was already in the business of deciding which past would be allowed to count. Earthworks were assigned to a vanished non-Indian race, which made living nations easier to move. Later archaeology reversed the claim. Suppression can last. Ground can still speak. The speculative reading asks whether other files never got their reversal.</p>
       </div>
       <div class="item">
         <div class="when">~1946–1964 · Phase I</div>
-        <p>Hard times of depression and world war create strong people and a High. Institutions work. The harvest is real.</p>
+        <p>Depression and world war create the High. Institutions work because the last emergency is still in living memory. Children copy functioning forms. This is the harvest, not the softness.</p>
       </div>
       <div class="item">
         <div class="when">~1964–1984 · good times begin to invent weak people</div>
-        <p>Awakening. Values revolt against the High. Necessary in part. Solvent in part. The field starts to argue with its own foundations.</p>
+        <p>Awakening. A values revolt against the High. Some of it is necessary. Some of it dissolves the load-bearing beams and calls the dust liberation. The field starts to argue with its own foundations while still spending the surplus those foundations produced.</p>
       </div>
       <div class="item">
         <div class="when">~1984–2008 · Phase II ripening into Phase III</div>
-        <p>Unraveling. Surplus without cohesion. Finance, spectacle, and a thinning common story. Weakness still wears the clothes of success.</p>
+        <p>Unraveling. Surplus without cohesion. Finance, spectacle, and a thinning common story. Weakness still wears the clothes of success. Competence becomes a specialty instead of a public habit.</p>
       </div>
       <div class="item">
         <div class="when">2008–now · Phase III, entering Phase IV</div>
-        <p>Hard times created by the previous softening: 2008 as the visible crack, then polarization, elite overproduction, debt, and institutional unreality. Generationally the Crisis cohort is already on the field.</p>
+        <p>Hard times created by the previous softening. 2008 is the visible crack: trust, debt, and the post-1945 institutional story all take a hit at once. Polarization and elite overproduction do the rest. Generationally the Crisis cohort is already on the field. Boomers hold many elder seats. X manages the middle. Millennials and Z inherit the weather.</p>
       </div>
       <div class="item">
         <div class="when">2026–2032 · Grey Era / possible reset window</div>
-        <p>Double fourth, if the clocks are stacked: late long cycle plus short-cycle Crisis. The old story is exhausted. The new one is unwritten. This is the same class of hinge as the nineteenth century, with one difference. Copying is cheap. Monopoly over memory is harder. A quiet edit is less free than it was when the file could still be burned by hand.</p>
+        <p>Double fourth, if the clocks are stacked: late long cycle plus short-cycle Crisis. The old story is exhausted. The new one is unwritten. This is the same class of hinge as the nineteenth century, with one material difference. Copying is cheap. Satellite maps exist. Machines remember. A quiet edit is less free than it was when the file could still be burned by hand. That does not guarantee honesty. It only raises the price of monopoly.</p>
       </div>
       <div class="item">
         <div class="when">2030s–2050s · Phase I, if the hinge resolves</div>
-        <p>Hard times create strong people again — or they create only wreckage. Reconstruction is the proverb’s first line returning. It is not automatic. It is what happens when necessity is allowed to select.</p>
+        <p>Hard times create strong people again — or they create only wreckage and a prettier caption. Reconstruction is the proverb’s first line returning. It is not automatic. It is what happens when necessity is allowed to select, and when memory is good enough to keep the last trick from being sold as a beginning.</p>
       </div>
     </div>
 
@@ -217,7 +244,7 @@
           <td>Grey / reset</td>
           <td>The wheel either turns or is forged again</td>
           <td>2026–2032</td>
-          <td>Same class as 19th-c mop-up, worse visibility for secrecy</td>
+          <td>Same class as 19th-c mop-up; secrecy is more expensive</td>
         </tr>
         <tr>
           <td>Return</td>
@@ -228,13 +255,22 @@
       </tbody>
     </table>
 
+    <h2>Technology and the psyche</h2>
+    <p>The wheel is older than the transistor. The transistor changed how fast a mind can be moved around the wheel. Information systems do not only raise output. They raise the volume of comparison, panic, imitation, and false consensus. A late-phase society with slow media still has seasons. A late-phase society with instant media can live several seasons in a decade, at least in mood. Mood is not structure. Structure still has to be rebuilt in courts, shops, families, and power stations. The danger of the present is mistaking a viral season for a finished reconstruction.</p>
+    <p>Space access and machine intelligence are the current step-changes, the way farming myths and later devices were step-changes: they raise the ceiling. They do not abolish gravity. What goes up inside a cycle still meets the late-phase bill unless the step actually changes the feedback — more truth in the file, less elite theater, faster correction, a psyche that can stand surplus without rotting.</p>
+
     <h2>The bet</h2>
-    <p>The cycle repeats when the last hard times are misremembered. Secrecy is not the only cause — vanity and surplus would still rot a people — but secrecy is how a society is kept from recognizing the proverb while it is still living inside it. If truth became the default, history would be less of a weapon and more of a warning. Mistakes would still happen. They would be harder to sell as destiny.</p>
+    <p>The cycle repeats when the last hard times are misremembered. Secrecy is not the only cause. Vanity and surplus would still rot a people with perfect archives. But secrecy is how a society is kept from recognizing the proverb while it is still living inside it. If truth became the default, history would be less of a weapon and more of a warning. Mistakes would still happen. They would be harder to sell as destiny.</p>
     <p>We are on par for changes because we are in the grey line of the proverb, not because a hidden empire has to be real. The speculative Americas / nineteenth-century reset stays on the map as the kind of Phase IV that tries to steal the next Phase I. The live question is narrower and sharper: this time, does the hinge produce strong people, or only a cleaner story about why the last people had to disappear?</p>
 
+    <div class="card">
+      <p style="margin:0">Hope is not a prediction. It is a refusal to treat the wheel as holy. A break would look like this: the grey interval is used to restore competence and the record at the same time. No new Genesis that requires amnesia. No High built on a cleaned grave and called innocence.</p>
+    </div>
+
     <footer>
-      Spine of the paper: the proverb. Injected layer: a possible reset at the Americas / 19th-century hinge. Present tense: late Phase III into Phase IV. Hope: that memory holds long enough to break the wheel instead of oiling it.
+      Spine: the proverb. Injected layer: a possible reset at the Americas / 19th-century hinge. Present tense: late Phase III into Phase IV. Hope: that memory holds long enough to break the wheel instead of oiling it.
     </footer>
   </div>
 </body>
+
 </html>
